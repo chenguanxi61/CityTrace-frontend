@@ -33,13 +33,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
-const activeMenu = ref(route.path)
 const lang = ref('zh')
+
+// 计算当前激活的菜单项
+const activeMenu = computed(() => {
+  const path = route.path
+  // 处理子路由的情况，比如 /itinerary/edit/1 应该高亮 /itinerary
+  if (path.startsWith('/itinerary/edit')) {
+    return '/itinerary'
+  }
+  if (path.startsWith('/itinerary/') && !path.startsWith('/itinerary/edit')) {
+    return '/itinerary'
+  }
+  if (path.startsWith('/destination/')) {
+    return '/destination'
+  }
+  return path
+})
 
 const goProfile = () => router.push('/profile')
 const goSettings = () => router.push('/settings')

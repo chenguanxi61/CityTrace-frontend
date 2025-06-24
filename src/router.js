@@ -11,6 +11,7 @@ import ItineraryEdit from './views/ItineraryEdit.vue'
 import { getCurrentUser } from './utils/user'
 
 const routes = [
+  { path: '/', redirect: '/itinerary' }, // 首页重定向到行程页面
   { path: '/register', component: Register },
   { path: '/login', component: Login },
   { path: '/profile', component: Profile },
@@ -19,7 +20,10 @@ const routes = [
   { path: '/destination/:id', component: DestinationDetail },
   { path: '/itinerary', component: ItineraryList },
   { path: '/itinerary/edit/:id?', component: ItineraryEdit },
-  { path: '/itinerary/:id', component: ItineraryDetail }
+  { path: '/itinerary/:id', component: ItineraryDetail },
+  { path: '/journal', component: () => import('./views/Journal.vue') }, // 旅行日志页面
+  { path: '/map', component: () => import('./views/Map.vue') }, // 地图页面
+  { path: '/settings', component: () => import('./views/Settings.vue') } // 设置页面
 ]
 
 const router = createRouter({

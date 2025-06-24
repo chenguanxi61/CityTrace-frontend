@@ -18,8 +18,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import request from '../api/request'
 import { getCurrentUser } from '../utils/user'
+import { itineraryApi } from '../api/itinerary'
 
 const detail = ref(null)
 const route = useRoute()
@@ -31,7 +31,7 @@ if (!user) {
 
 onMounted(async () => {
   if (!user) return
-  const res = await request.get(`/user/itinerary/${route.params.id}`)
+  const res = await itineraryApi.getItineraryById(route.params.id)
   if (res.code === 0) {
     detail.value = res.itinerary
   }

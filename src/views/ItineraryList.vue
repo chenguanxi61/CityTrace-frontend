@@ -27,9 +27,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import request from '../api/request'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getCurrentUser } from '../utils/user'
+import { itineraryApi } from '../api/itinerary'
 
 const router = useRouter()
 const user = getCurrentUser()
@@ -40,7 +40,7 @@ const loadList = async () => {
   if (!user) return
   loading.value = true
   try {
-    const res = await request.get('/user/itinerary/list', { params: { userId: user.id } })
+    const res = await itineraryApi.getUserItineraries(user.id)
     if (res.code === 0) {
       list.value = res.list
     }
@@ -65,7 +65,7 @@ const deleteItinerary = (id) => {
   ElMessageBox.confirm('确定要删除该行程吗？', '提示', { type: 'warning' })
     .then(async () => {
       try {
-        const res = await request.delete(`/user/itinerary/${id}`)
+        const res = await itineraryApi.deleteItinerary(id)
         if (res.code === 0) {
           ElMessage.success('删除成功')
           loadList()

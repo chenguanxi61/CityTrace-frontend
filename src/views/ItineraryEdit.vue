@@ -34,6 +34,7 @@ import { useRoute, useRouter } from 'vue-router'
 import request from '../api/request'
 import { ElMessage } from 'element-plus'
 import { getCurrentUser } from '../utils/user'
+import { itineraryApi } from '../api/itinerary'
 
 const route = useRoute()
 const router = useRouter()
@@ -70,7 +71,7 @@ onMounted(async () => {
     destinations.value = resDest.list
   }
   if (isEdit.value) {
-    const res = await request.get(`/user/itinerary/${route.params.id}`)
+    const res = await itineraryApi.getItineraryById(route.params.id)
     if (res.code === 0) {
       Object.assign(form.value, res.itinerary)
     }
@@ -81,7 +82,7 @@ const onSubmit = async () => {
   await formRef.value.validate()
   loading.value = true
   if (isEdit.value) {
-    const res = await request.put('/user/itinerary/update', form.value)
+    const res = await itineraryApi.updateItinerary(form.value)
     loading.value = false
     if (res.code === 0) {
       ElMessage.success('修改成功')
@@ -90,7 +91,7 @@ const onSubmit = async () => {
       ElMessage.error(res.msg)
     }
   } else {
-    const res = await request.post('/user/itinerary/add', form.value)
+    const res = await itineraryApi.createItinerary(form.value)
     loading.value = false
     if (res.code === 0) {
       ElMessage.success('添加成功')
